@@ -18,8 +18,9 @@ def other_personal_account():
 
 
 def employee_account():
-        """My email account at work"""
-        return 'mail.altobridge.com', employee_username(), decode('QWxyQjNAMTY=\n')
+    """My email account at work"""
+    return ('excork2.cork.s3group.com',
+            employee_username(), decode('QWxyQjNAMTY=\n'))
 
 
 def second_employee_account():
@@ -68,8 +69,8 @@ def personal_email(username):
 
 
 def employee_username():
-        """What my employer's machines use as my name"""
-        return '%s%s' % (forename()[0], surname())
+    """What my employer's machines use as my name"""
+    return '%s%s' % (forename(), surname()[0])
 
 
 def employee_address():
@@ -120,8 +121,8 @@ def _employer_domain():
 
 
 def employer_name():
-        """The name of my company"""
-        return 'altobridge'
+    """The name of my company"""
+    return 's3group'
 
 
 def mail_site_name():
