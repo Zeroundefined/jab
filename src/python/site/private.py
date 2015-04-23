@@ -20,7 +20,7 @@ def other_personal_account():
 def employee_account():
     """My email account at work"""
     return ('excork2.cork.s3group.com',
-            employee_username(), decode('QWxyQjNAMTY=\n'))
+            employee_username(), decode('QmxyQTNAMTk=\n'))
 
 
 def second_employee_account():
