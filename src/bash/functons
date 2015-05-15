@@ -843,6 +843,14 @@ sto () {
     firefox "http://stackoverflow.com/search?q=$*"
 }
 
+slb () {
+    sudo /usr/bin/locate -b "$1" | g /$1\$
+}
+
+slf () {
+    sudo /usr/bin/locate "$1" | g -v virtualenvs | g /$1\$
+}
+
 tel () {
     # Using "$*" instead of "$@" deliberately here
     # Side effect: args are now text, not args
