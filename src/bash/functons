@@ -587,6 +587,12 @@ cls () {
     ls "$@"
 }
 
+dbg () {
+    set -x
+    "$@"2>&1 | sed -e 's/File \("[^"]*"\), line \([0-9]*\)/ vim \1 +\2/' | grep 'vim "[^"]*" +[0-9]*' -B7 -A7
+    set +x
+}
+
 ddg () {
     firefox "https://next.duckduckgo.com/?q=$*"
 }
@@ -847,7 +853,7 @@ slb () {
     sudo /usr/bin/locate -b "$1" | g /$1\$
 }
 
-slf () {
+slp () {
     sudo /usr/bin/locate "$1" | g -v virtualenvs | g /$1\$
 }
 
@@ -1140,8 +1146,8 @@ please () {
 }
 
 mython () {
-    local __doc__="python 2.7 in $HOME"
-    $HOME/bin/python2.7 "$@"
+    local __doc__="jab's python ('jython' was taken)"
+    $JAB/bin/python "$@"
 }
 
 qwerty  () {
