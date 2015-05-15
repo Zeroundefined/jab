@@ -23,8 +23,8 @@ source_path () {
 }
 
 _get_source_path_from_what () {
-    GITHUB=${GITHUB:-~/src/git/hub}
-    local what_script=$(readlink -f $GITHUB/what/what.sh)
+    local _github=${GITHUB:-$(readlink -f ~/src/git/hub)}
+    local what_script=$(readlink -f $_github/what/what.sh)
     if test -f "$what_script"; then
         source "$what_script"
     else
@@ -42,12 +42,13 @@ _source_jab_scripts () {
     for script in environ python-environ ; do
         source_path "$JAB/envirok/$script" && continue
     done
-    for script in aliases functons prompt employer src/bash/git-completion.bash; do
+    for script in aliases functons prompt employer src/bash/git/git-completion.bash; do
         source_path "$JAB/$script" || continue
         source_path "$JAB_LOCAL/$script" || continue
     done
+    local _github=${GITHUB:-$(readlink -f ~/src/git/hub)}
     for script in kd/kd.sh viack/viack; do
-        source_path "$GITHUB"/$script
+        source_path "$_github"/$script
     done
 }
 
@@ -93,27 +94,34 @@ _show_welcome () {
 
 _set_up_symbols () {
     unset JAB
-    local github_jab_dir=$(readlink -f ~/src/git/hub/dotjab)
-    local myhome_jab_dir=$(readlink -f ~/.jab)
+    local _github=${GITHUB:-$(readlink -f ~/src/git/hub)}
+    local _jab=$_github/dotjab
+    JAB=no_jab
+    test -d $_jab && JAB=$_jab
+    export JAB
+    local _jab_bash=$_jab/src/bash
+    local _myhome_jab_dir=$(readlink -f ~/.jab)
     bash_jab_dir=$(dirname $(readlink -f "$BASH_SOURCE"))
-    if [[ $bash_jab_dir == $github_jab_dir ]]; then
-        JAB=$github_jab_dir
-    elif [[ $bash_jab_dir == $myhome_jab_dir ]]; then
-        if [[ -f $github_jab_dir/bashrc ]]; then
-            echo "Warn: Using $myhome_jab_dir/bashrc, while $github_jab_dir/bashrc exists" >&2
+    if [[ $bash_jab_dir == $_myhome_jab_dir ]]; then
+        if [[ -f $_jab_bash/bashrc ]]; then
+            echo "Warn: Using $_myhome_jab_dir/bashrc, while $_jab_bash/bashrc exists" >&2
         fi
-        JAB=$myhome_jab_dir
+        JAB=$_myhome_jab_dir
     fi
     if [[ -n $JAB ]]; then
         export JAB
     else
-        echo "Could not find this script in" $myhome_jab_dir $github_jab_dir
+        echo "Could not find this script in" $_jab_bash
         unset JAB
         return 1
     fi
-    JAB_LOCAL=${myhome_jab_dir}/local
-    [[ -d $JAB_LOCAL ]] || JAB_LOCAL=
-    [[ -z $JAB_LOCAL && -d $github_jab_dir/local ]] && JAB_LOCAL=$github_jab_dir/local
+    JAB_LOCAL=no_jab_local
+    if [[ -d $JAB/local ]]; then
+        JAB_LOCAL=${JAB}/local
+    elif [[ -d $github_jab_dir/local ]]; then
+        JAB_LOCAL=$github_jab_dir/local
+    fi
+    export JAB_LOCAL
     return 0
 }
 
